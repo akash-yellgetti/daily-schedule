@@ -109,7 +109,7 @@ $(document).ready(function() {
           }
       },
       columns: [
-          { title: "Task", name: "task"},
+          { title: "Task", name: "task", width: '70%'},
           { title: "Duration (minutes)", name: "duration"},
           { title: "Start Time", name: "startTime"},
           { title: "End Time", name: "endTime"}
