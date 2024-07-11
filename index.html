@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Display</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .table-active {
+        background-color: #d1e7dd !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4">Daily Schedule</h1>
+      <div id="scheduleTable"></div>
+    </div>
+
+    <script>
+      // Example usage
+      let startTimeStr = "05:00";
+      let elements = [
+        { task: "Morning Walk", duration: 15 },
+        { task: "Morning Meditation", duration: 15 },
+        { task: "Drink Salt Water", duration: 15 },
+        { task: "Exercise #1", duration: 45 },
+        { task: "Scaler", duration: 150 },
+        { task: "Prep Breakfast", duration: 10 },
+        { task: "Morning Bath", duration: 15 },
+        { task: "Breakfast", duration: 10 },
+        { task: "Home To Metro", duration: 15 },
+        { task: "Metro", duration: 30 },
+        { task: "Metro To Office", duration: 15 },
+        { task: "Scrum", duration: 30 },
+        { task: "Work #1", duration: 30 },
+        { task: "Morning Snack", duration: 30 },
+        { task: "Work #2", duration: 90 },
+        { task: "Lunch", duration: 30 },
+        { task: "TT", duration: 60 },
+        { task: "Work #3", duration: 90 },
+        { task: "Evening Snack", duration: 30 },
+        { task: "Work #4", duration: 90 },
+        { task: "Office To Metro ", duration: 15 },
+        { task: "Metro", duration: 30 },
+        { task: "Metro To Home", duration: 15 },
+        { task: "Freshen Up", duration: 15 },
+        { task: "Dinner", duration: 15 },
+        { task: "Dish Cleaning", duration: 10 },
+        { task: "Reading", duration: 15 },
+        { task: "Next Day Prep", duration: 45 },
+        { task: "Set Bed", duration: 15 },
+        { task: "Night Bath", duration: 15 },
+        { task: "Facial Care", duration: 10 },
+        { task: "Hair Care", duration: 10 },
+        { task: "Skin Care", duration: 10 },
+        { task: "Night Meditation", duration: 15 },
+        { task: "Sleep", duration: 420 },
+      ];
+
+      let mySchedule = new Schedule(startTimeStr, elements);
+      let previousActiveTask = mySchedule.generateAndPrintSchedule();
+
+      // Check and refresh the page if the active task changes
+      setInterval(() => {
+        let currentActiveTask = mySchedule.generateAndPrintSchedule();
+        if (currentActiveTask !== previousActiveTask) {
+          location.reload();
+        }
+      }, 30000);
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
