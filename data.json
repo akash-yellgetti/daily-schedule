@@ -1,115 +1,157 @@
 {
-    "startTime": "06:00",
+    "startTime": "05:45",
     "columns": [
-        "Task",
-        "Duration (minutes)",
+        "title",
+        "description",
+        "duration",
         "Start Time",
         "End Time"
     ],
     "elements": [
         {
-            "task": "Exercise #1",
+            "title": "Drink Water",
+            "description": "<ol><li>2 spoon Cumin Seeds and 2 cup</li><li>Soak it over night</li><li> Heat The Mixure until it became one cup </li><li> LEt the mixture rest for while and Add Lemon when luke warn </li></ol> <ol><li>Cumcumber</li><li>Mint </li><li>Lemon </li></ol>  <ol><li>Cumin Seeds</li><li>Funnel Seeds</li></ol><ol><li>Haldi</li><li>Black Salt</li><li>Black Pepper</li><li>Dal Chinni</li><li>Adrak</li></ol>",
             "duration": 15
         },
         {
-            "task": "Morning Meditation",
+            "title": "Exercise #1",
+            "description": " <ol><li>Jumping Jack: 50</li><li>Elbow To Knee: 50</li><li>High Keen: 50 </li><li>squats : 50</li><li> Elbow To Knee Clap : 50</li><li> Wall Push Up : 50</li><li> Knee Lunges : 50</li><li>Butt Kick </li><li>Wall Seat Plank: 60 sec</li><li>Plank: 30 sec (2 time) </li></ol>",
             "duration": 15
         },
         {
-            "task": "Freelancing",
+            "title": "Morning Meditation",
+            "description": "",
+            "duration": 15
+        },
+        {
+            "title": "Freelancing",
+            "description": "",
             "duration": 150
         },
         {
-            "task": "Morning Bath",
+            "title": "Morning Bath",
+            "description": "",
             "duration": 15
         },
         {
-            "task": "Breakfast",
+            "title": "Breakfast",
+            "description": "<p>Meal Protein: 30g </p> <ol><li>Rajma: 40g</li><li>Moong : 40g</li><li>Chick Peas : 40g</li><li>Curd: 100g </li><li>Onion / Tomato / Salt </li></ol>",
             "duration": 15
         },
         {
-            "task": "Free Time",
+            "title": "Free Time",
+            "description": "",
             "duration": 90
         },
         {
-            "task": "Scrum",
+            "title": "Scrum",
+            "description": "",
             "duration": 30
         },
         {
-            "task": "Work #1",
+            "title": "Work #1",
+            "description": "",
             "duration": 30
         },
         {
-            "task": "Morning Snack",
+            "title": "Morning Snack",
+            "description": "<p>Meal Protein: 10g </p> <ol><li>Roasted Chana: 60g</li><li>One Glass Milk </li><li>1 Banana</li><li> 2 Khajur</li><li>Gud : 5g </li></ol>",
             "duration": 30
         },
         {
-            "task": "Work #2",
+            "title": "Work #2",
+            "description": "",
             "duration": 90
         },
         {
-            "task": "Lunch",
+            "title": "Lunch",
+            "description": "<p>Chilla Meal Protein: 50g </p> <ol><li>Panneer: 100g</li><li>Basan : 100g</li> <li>Curd: 200g </li><li>Onion / Tomato / Salt </li></ol>",
             "duration": 30
         },
         {
-            "task": "TT",
+            "title": "TT",
+            "description": "",
             "duration": 30
         },
         {
-            "task": "Work #3",
+            "title": "Work #3",
+            "description": "",
             "duration": 90
         },
         {
-            "task": "Evening Snack",
+            "title": "Evening Snack",
+            "description": "<p>Meal Protein: 10g </p> <ol><li>Cashew nut: 5 pieces</li><li>Almond nut: 5 pieces</li><li>Dates (Khajur): 2 pieces</li><li>Pumpkin Seeds: 5g</li><li>Chia Seeds: 5g</li><li>Flaxseeds: 5g</li></ol>",
             "duration": 30
         },
         {
-            "task": "Work #4",
+            "title": "Work #4",
+            "description": "",
             "duration": 90
         },
         {
-            "task": "TT",
+            "title": "TT",
+            "description": "",
             "duration": 30
         },
         {
-            "task": "Free Time",
+            "title": "Free Time",
+            "description": "",
             "duration": 90
         },
         {
-            "task": "Dinner",
+            "title": "Dinner",
+            "description": "",
             "duration": 30
         },
         {
-            "task": "Free Time",
+            "title": "Free Time",
+            "description": "",
             "duration": 60
         },
         {
-            "task": "Set Bed",
+            "title": "Set Bed",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Night Bath",
+            "title": "Night Bath",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Facial Care",
+            "title": "Facial Care",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Hair Care",
+            "title": "Hair Care",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Skin Care",
+            "title": "Skin Care",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Night Meditation",
+            "title": "Night Meditation",
+            "description": "",
             "duration": 10
         },
         {
-            "task": "Sleep",
-            "duration": 420
+            "title": "Sleep #1",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Sleep #2",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Sleep #3",
+            "description": "",
+            "duration": 300
         }
     ]
 }

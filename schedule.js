@@ -13,10 +13,11 @@ class Schedule {
   calculateSchedule() {
       let schedule = [];
       let currentTime = new Date(this.startTime);
-      this.elements.forEach(({ task, duration }) => {
+      this.elements.forEach(({ title, description, duration }) => {
           let endTime = this.addMinutes(currentTime, duration);
           schedule.push({ 
-              task, 
+              title,
+              description,
               minutes: duration, 
               startTime: new Date(currentTime), 
               endTime: new Date(endTime) 
@@ -40,11 +41,12 @@ class Schedule {
   printSchedule(schedule) {
       let table = $('#scheduleTable').DataTable();
       table.clear();
-      schedule.forEach(({ task, minutes, startTime, endTime }) => {
+      schedule.forEach(({ title, description, minutes, startTime, endTime }) => {
           if (!this.hasPassed(endTime)) {
               let isActive = this.isCurrentActive(startTime, endTime);
               let rowNode = table.row.add([
-                  task,
+                  title,
+                  description,
                   minutes,
                   this.formatTime(startTime),
                   this.formatTime(endTime),
@@ -108,8 +110,13 @@ $(document).ready(function() {
               return [];
           }
       },
+      lengthMenu: [
+        [ 30,10, 50, -1],
+        [ 30,10, 50, "All"],
+      ],
       columns: [
-          { title: "Task", name: "task", width: '70%'},
+          { title: "Title", name: "title", width: "20%" },
+          { title: "Description", name: "description", width: "50%" },
           { title: "Duration (minutes)", name: "duration"},
           { title: "Start Time", name: "startTime"},
           { title: "End Time", name: "endTime"}
