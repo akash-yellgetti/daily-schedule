@@ -79,6 +79,7 @@ class Schedule {
 
   hasPassed(endTime) {
     let now = new Date();
+    // return false;
     return now > endTime;
   }
 
@@ -114,8 +115,8 @@ $(document).ready(function () {
       },
     },
     lengthMenu: [
-      [30, 10, 50, -1],
-      [30, 10, 50, "All"],
+      [  50, -1],
+      [ 50, "All"],
     ],
     columns: [
       { title: "Title", name: "title", width: "20%" },
