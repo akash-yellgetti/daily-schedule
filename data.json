@@ -1,5 +1,5 @@
 {
-    "startTime": "05:45",
+    "startTime": "06:00",
     "columns": [
         "title",
         "description",
@@ -8,166 +8,53 @@
         "End Time"
     ],
     "elements": [
-        {
-            "title": "Drink Water",
-            "description": " <ol><li>2 spoon Cumin Seeds and 2 cup</li><li>Soak it over night</li><li> Heat The Mixure until it became one cup </li><li> LEt the mixture rest for while and Add Lemon when luke warn </li></ol> <ol><li>Cumcumber</li><li>Mint </li><li>Lemon </li></ol>  <ol><li>Cumin Seeds</li><li>Funnel Seeds</li></ol><ol><li>Haldi</li><li>Black Salt</li><li>Black Pepper</li><li>Dal Chinni</li><li>Adrak</li></ol>",
-            "duration": 10
-        },
-        {
-            "title": "Pre Mix",
-            "description": "<ol><li>Half Pack Electrol Powder | Health Ok</li> <li> White Salt</li> <li>Lemon</li><ol>",
-            "duration": 5
-        },
-        {
-            "title": "Exercise #1",
-            "description": " <ol><li>Jumping Jack: 60</li><li>Elbow To Knee: 60</li><li>High Keen: 60 </li><li>squats : 60</li><li> Elbow To Knee Clap : 60</li><li> Wall Push Up : 60</li><li> Knee Lunges : 60</li><li>Butt Kick: 60 </li><li>Cross Hand Toe Touch: 60 </li><li>Mountain Climbers: 60 </li><li>Glute Bridge pose</li><li>Cow - Cat Pose: 60sec </li><li>Nag Pose: 60sec </li><li>Wall Seat Plank: 60 sec</li><li>Plank: 30 sec (2 time) </li></ol>",
-            "duration": 15
-        },
-        {
-            "title": "Morning Meditation",
-            "description": "",
-            "duration": 15
-        },
-        {
-            "title": "Freelancing",
-            "description": "",
-            "duration": 150
-        },
-        {
-            "title": "Walk",
-            "description": "5000 Steps",
-            "duration": 20
-        },
-        {
-            "title": "Morning Bath",
-            "description": "",
-            "duration": 15
-        },
-        {
-            "title": "Breakfast",
-            "description": "<p>Meal Protein: 30g </p> <ol><li>Rajma: 40g</li><li>Moong : 40g</li><li>Chick Peas : 40g</li><li>Curd: 100g </li><li>Onion / Tomato / Salt </li></ol>",
-            "duration": 15
-        },
-        {
-            "title": "Free Time",
-            "description": "",
-            "duration": 90
-        },
-        {
-            "title": "Scrum",
-            "description": "",
-            "duration": 30
-        },
-        {
-            "title": "Work #1",
-            "description": "",
-            "duration": 30
-        },
-        {
-            "title": "Morning Snack",
-            "description": "<p>Meal Protein: 10g </p> <ol><li>Whole Black Grams Roasted Chana: 60g</li><li>One Glass Milk </li><li>1 Banana</li><li> 2 Khajur</li><li>Gud : 5g </li></ol>",
-            "duration": 30
-        },
-        {
-            "title": "Work #2",
-            "description": "",
-            "duration": 90
-        },
-        {
-            "title": "Lunch",
-            "description": "<p>Chilla Meal Protein: 50g </p> <ol><li>Panneer: 100g || Soya Chunk: 100g</li><li>Basan : 100g</li> <li>Curd: 200g </li><li>Onion / Tomato / Salt </li></ol>",
-            "duration": 30
-        },
-        {
-            "title": "TT",
-            "description": "",
-            "duration": 30
-        },
-        {
-            "title": "Work #3",
-            "description": "",
-            "duration": 90
-        },
-        {
-            "title": "Evening Snack",
-            "description": "<p>Meal Protein: 10g </p> <ol><li>Cashew nut: 5 pieces</li><li>Almond nut: 5 pieces</li><li>Dates (Khajur): 2 pieces</li><li>Pumpkin Seeds: 5g</li><li>Chia Seeds: 5g</li><li>Flaxseeds: 5g</li></ol><ol><li>cucumber</li><li>beetroot</li><li>Carrot</li><li>Peanut: 50g</li><li>Curd: 50g</li></ol>",
-            "duration": 30
-        },
-        {
-            "title": "Work #4",
-            "description": "",
-            "duration": 90
-        },
-        {
-            "title": "TT",
-            "description": "",
-            "duration": 30
-        },
-        {
-            "title": "Free Time",
-            "description": "",
-            "duration": 90
-        },
-        {
-            "title": "Dinner",
-            "description": "",
-            "duration": 30
-        },
-        {
-            "title": "Free Time",
-            "description": "",
-            "duration": 20
-        },
         
         {
-            "title": "Walk",
-            "description": "5000 Steps",
-            "duration": 20
-        },
-        {
-            "title": "Night Bath",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Set Bed",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Facial Care",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Hair Care",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Skin Care",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Night Meditation",
-            "description": "",
-            "duration": 10
-        },
-        {
-            "title": "Sleep #1",
+            "title": "Family",
             "description": "",
             "duration": 60
         },
         {
-            "title": "Sleep #2",
+            "title": "Friends",
             "description": "",
             "duration": 60
         },
         {
-            "title": "Sleep #3",
+            "title": "Faith",
             "description": "",
-            "duration": 300
+            "duration": 60
+        },
+        {
+            "title": "Health",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Hygiene",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Hobby",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Self-Soul",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Services ( Chores )",
+            "description": "",
+            "duration": 60
+        },
+        {
+            "title": "Smile",
+            "description": "",
+            "duration": 60
         }
+       
+        
     ]
 }
