@@ -1,5 +1,5 @@
 {
-    "startTime": "06:30",
+    "startTime": "06:00",
     "columns": [
         "title",
         "description",
@@ -9,31 +9,39 @@
     ],
     "elements": [
         {
-            "title": "Exercise #1",
-            "description": "Cardio | Strength Training",
-            "duration": 20
-        },
-        {
-            "title": "Morning",
-            "description": "<ol><li>15 -20 soaked methidana (soaked overnight in a cup of water)</li><li>Glass of hot water</li><li>30 ml Amala</li><li>30 ml Aloe Vera juice</li><li>2 Dried figs</li></ol>",
+            "title": "Water",
+            "description": "Lukewarm water || <ol><li>15 -20 soaked methidana (soaked overnight in a cup of water)</li><li>Glass of hot water</li><li>30 ml Amala</li><li>30 ml Aloe Vera juice</li><li>2 Dried figs</li></ol>",
+
             "duration": 10
         },
+        {
+            "title": "Exercise #1",
+            "description": "Cardio | Strength Training",
+            "duration": 30
+        },
+        {
+            "title": "Shower",
+            "description": "",
+            "duration": 10
+        },
+        {
+            "title": "Meditate && Prayer",
+            "description": "",
+            "duration": 10
+        },
+        
         {
             "title": "Scaler",
             "description": "",
             "duration": 120,
             "startTime": "07:00"
         },
-        {
-            "title": "Shower",
-            "description": "",
-            "duration": 15
-        },
+        
         {
 
             "title": "Share Market",
             "description": "",
-            "duration": 45
+            "duration": 60
         },
         {
             "title": "Breakfast && Share Market",
@@ -101,9 +109,15 @@
             "duration": 30
         },
         {
-            "title": "Friend || Family",
-            "description": "",
-            "duration": 60
+            "title": "Exercise #2",
+            "description": "Walking",
+            "duration": 30
+        },
+        
+        {
+            "title": "Next Day Perparation",
+            "description": "<ol><li>Food Perparation</li><li>Clothes</li><li>Appointment</li><li>Birthday/Anniversay Checklist</li></ol>",
+            "duration": 30
         },
         {
             "title": "Dinner",
@@ -114,25 +128,25 @@
         {
             "title": "Night Walk",
             "description": "Walking",
-            "duration": 10
+            "duration": 15
         },
-        {
-            "title": "Next Day Perparation",
-            "description": "<ol><li>Food Perparation</li><li>Clothes</li><li>Appointment</li><li>Birthday/Anniversay Checklist</li></ol>",
-            
-            "duration": 40
-        },
-        {
-            "title": "Set Bed",
+       {
+            "title": "Friend || Family",
             "description": "",
-            "duration": 10,
-            "type": "Self"
+            "duration": 45
         },
         {
             "title": "Shower",
             "description": "",
             "duration": 10,
             "startTime": "21:30"
+        },
+        
+        {
+            "title": "Set Bed",
+            "description": "",
+            "duration": 10,
+            "type": "Self"
         },
         
         {
@@ -180,7 +194,7 @@
         {
             "title": "Sleep",
             "description": "",
-            "duration": 60,
+            "duration": 50,
             "type": "Sleep"
         }
     ]
