@@ -186,7 +186,7 @@ $(document).ready(function () {
                 'pageLength',
                 {
                   extend: 'csv',
-                  split: ['excelHtml5', 'copyHtml5', 'pdfHtml5']
+                  split: ['excelHtml5', 'csvHtml5', 'copyHtml5', 'pdfHtml5']
                 }
             ]
         }
