@@ -76,7 +76,7 @@
         },
         {
             "title": "Lunch",
-            "description": "<ol><li> One Bowl Rice || Two Fulkas || Wari-Dahi Khichdi  </li><li> One Bowl Vegetable || One Bowl Dal || Two Egg White   </li> <li>Salad (Cucumber | Capsicum | Carrot | Beetroot | Onion | Tomato)</li></ol>",
+            "description": "<ol><ol><li>Besan : 100g</li><li>Kala Chana</li></ol><li> One Bowl Rice || Two Fulkas || Wari-Dahi Khichdi  </li><li> One Bowl Vegetable || One Bowl Dal || Two Egg White   </li> <li>Salad (Cucumber | Capsicum | Carrot | Beetroot | Onion | Tomato)</li></ol>",
             "duration": 30,
             "startTime": "14:00"
         },

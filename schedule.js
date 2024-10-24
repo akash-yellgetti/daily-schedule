@@ -178,7 +178,19 @@ class Schedule {
 
 $(document).ready(function () {
   $("#scheduleTable").DataTable({
-    dom: 'lBfrtip',
+    // dom: 'lBfrtip',
+    
+    layout: {
+        topStart: {
+            buttons: [
+                'pageLength',
+                {
+                  extend: 'csv',
+                  split: ['excelHtml5', 'copyHtml5', 'pdfHtml5']
+                }
+            ]
+        }
+    },
     ajax: {
       url: "diet.json",
       dataSrc: function (json) {
@@ -204,8 +216,8 @@ $(document).ready(function () {
       },
     },
     lengthMenu: [
-      [  50, -1],
-      [ 50, "All"],
+      [  50, 30, 20, 10, -1],
+      [  50, 30, 20, 10, "All"],
     ],
     columns: [
       { title: "Start Time", name: "startTime" , width: "6%"},
