@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="paperTradingApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Paper Trading</title>
+  </head>
+  <body ng-controller="TradingController">
+    <div class="container">
+      <h1>Paper Trading Platform</h1>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="panel panel-default">
+            <div class="panel-heading">Add a Trade</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date"  class="form-control" id="date" ng-model="newTrade.date">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="action">Action:</label>
+                    <select id="action" class="form-control" ng-model="newTrade.action">
+                      <option value="Buy">Buy</option>
+                      <option value="Sell">Sell</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="stock">Stock:</label>
+                    <input type="text"  class="form-control" id="stock" placeholder="e.g., AAPL" ng-model="newTrade.stock">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="quantity">Stop Loss :</label>
+                    <input type="number" class="form-control" id="quantity" min="1" ng-model="newTrade.stoploss">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="price">Entry Price:</label>
+                    <input type="number"   class="form-control" id="price" step="0.01" ng-model="newTrade.price">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" class="form-control" id="quantity" min="1" ng-model="newTrade.quantity">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="quantity">Target:</label>
+                    <input type="number" class="form-control" id="quantity" min="1" ng-model="newTrade.target">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-footer">
+              <button class="btn btn-md btn-primary" ng-click="addTrade()">Add Trade</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">Account Summary</div>
+            <div class="panel-body">
+              <p><strong>Starting Balance:</strong> ${{ startingBalance }}</p>
+              <p><strong>Realized P/L:</strong> ${{ realizedPL.toFixed(2) }}</p>
+              <p><strong>Unrealized P/L:</strong> ${{ unrealizedPL.toFixed(2) }}</p>
+              <p><strong>Current Balance:</strong> ${{ currentBalance.toFixed(2) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">Trade Log</div>
+            <div class="panel-body">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Action</th>
+                    <th>Stock</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="trade in trades">
+                    <td>{{ trade.date }}</td>
+                    <td>{{ trade.action }}</td>
+                    <td>{{ trade.stock }}</td>
+                    <td>{{ trade.quantity }}</td>
+                    <td>{{ trade.price.toFixed(2) }}</td>
+                    <td>{{ trade.totalCost.toFixed(2) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <span class="panel-title">Position</span>
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Stock</th>
+                    <th>Average Buy Price</th>
+                    <th>Quantity Held</th>
+                    <th>Unrealized P/L</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(stock, data) in portfolio">
+                    <td>{{ stock }}</td>
+                    <td>{{ data.avgPrice.toFixed(2) }}</td>
+                    <td>{{ data.quantity }}</td>
+                    <td>{{ data.unrealizedPL.toFixed(2) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="./assets/js/custom/papertrading.js"></script>
+  </body>
+</html>

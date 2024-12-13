@@ -192,7 +192,7 @@ $(document).ready(function () {
         }
     },
     ajax: {
-      url: "diet.json",
+      url: "../../assets/json/new-routine.json",
       dataSrc: function (json) {
         let startTimeStr = json.startTime;
         let elements = json.elements;

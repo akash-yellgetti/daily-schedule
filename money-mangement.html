@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Money Management</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      class MoneyManagement {
+        /* Account Details */
+        accountBalance = 100000;
+        riskPercentage = 2;
+        rewardRatioValue = 1.5;
+        
+        /* Trade Details */
+        entryPrice = 2000; // share price
+        stopLossPrice = 1980;
+        targetPrice = 2020;
+
+        constructor() {
+        
+        }
+
+        setAccountBalance() {
+          this.accountBalance = document.getElementById("accountBalance").value; 
+        }
+
+        setRiskPercentage() {
+          this.riskPercentage = document.getElementById("riskPercentage").value; 
+        }
+
+        setRewardRatioValue() {
+          this.rewardRatioValue = document.getElementById("rewardRatioValue").value; 
+        }
+
+        setEntryPrice() {
+          this.entryPrice = document.getElementById("entryPrice").value; 
+        }
+
+        setStopLossPrice() {
+          this.stopLossPrice = document.getElementById("stopLossPrice").value; 
+        }
+
+        setTargetPrice() {
+          this.targetPrice = document.getElementById("targetPrice").value; 
+        }
+        
+        calculateRisk() {
+          return this.accountBalance * this.percentageValue(this.riskPercentage);
+        }
+        
+        calculateReward() {
+          return this.calculateRisk() * this.rewardRatioValue;
+        }
+        
+        calculateQty() {
+          // console.log('entry price', this.entryPrice);
+          return this.calculateRisk() / (this.entryPrice - this.stopLossPrice);
+        }
+        
+        canTrade() {
+          return this.accountBalance > (this.calculateQty() * this.entryPrice);
+        }
+        
+        percentageValue(val) {
+          return val/100;
+        }
+      }
+      
+$(document).ready(function(){
+      $('#calc').click(function() {
+        // console.log('clicked');
+        const mm = new MoneyManagement();
+        mm.setAccountBalance();
+        mm.setRiskPercentage();
+        mm.setRewardRatioValue();
+        mm.setEntryPrice();
+        mm.setStopLossPrice();
+        mm.setTargetPrice();
+        
+        console.log(mm.calculateRisk());
+        console.log(mm.calculateReward());
+        console.log(mm.calculateQty());
+        console.log(mm.canTrade());
+      });
+      });
+      
+    </script>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4">Money Management</h1>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">Account Balance:</label>
+            <input type="text" class="form-control" id="accountBalance" value="100000">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">Risk: (i.e In Percentage )</label>
+            <input type="text" class="form-control" id="riskPercentage" value="2">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">Risk-Reward Ratio (i.e In Value )</label></label>
+            <input type="text" class="form-control" id="rewardRatioValue" value="1.5">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="usr">StopLoss Price</label></label>
+            <input type="text" class="form-control" id="stopLossPrice" value="80">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="usr">Entry Price</label>
+            <input type="text" class="form-control" id="entryPrice" value="100">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="usr">Target Price</label></label>
+            <input type="text" class="form-control" id="targetPrice" value="120">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary" id="calc">Calculate</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

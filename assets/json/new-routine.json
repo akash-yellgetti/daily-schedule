@@ -1,0 +1,134 @@
+{
+    "startTime": "06:30",
+    "columns": [
+        "title",
+        "description",
+        "duration",
+        "Start Time",
+        "End Time"
+    ],
+    "elements": [
+        {
+            "title": "FreshenUp",
+            "description": "",
+            "duration": 30
+        },
+        {
+            "title": "Preparation",
+            "description": "simply prepare breakfast lunch and dinner",
+            "duration": 30,
+            "startTime": "09:00"
+        },
+        {
+            "title": "Breakfast",
+            "description": "",
+            "duration": 30,
+            "startTime": "09:30"
+        },
+        {
+            "title": "Walk",
+            "description": "",
+            "duration": 15
+        },
+        {
+            "title": "Travel or Exercise",
+            "description": "",
+            "duration": 45
+        },
+        {
+            "title": "Scrum",
+            "description": "Work Day Start",
+            "type": "Work",
+            "duration": 30,
+            "startTime": "11:00"
+        },
+        {
+            "title": "Lunch",
+            "description": "",
+            "duration": 30,
+            "startTime": "14:00"
+        },
+        {
+            "title": "Walk Or Play Table Tennis",
+            "description": "",
+            "duration": 15
+        },
+        {
+            "title": "Continue TT or Relax or Nap",
+            "description": "",
+            "duration": 15
+        },
+        {
+            "title": "Travel or Exercise",
+            "description": "",
+            "duration": 60,
+            "startTime": "19:00"
+        },
+        {
+            "title": "Dinner",
+            "description": "",
+            "duration": 30,
+            "startTime": "20:00"
+        },
+        {
+            "title": "Walk",
+            "description": "",
+            "duration": 15
+        },
+        {
+            "title": "Friends",
+            "description": "",
+            "duration": 30
+        },
+        {
+            "title": "Family",
+            "description": "",
+            "duration": 45
+        },
+        {
+            "title": "Set Bed",
+            "description": "",
+            "duration": 10,
+            "startTime": "22:00",
+            "type": "Self"
+        },
+        
+        {
+            "title": "Facial Care",
+            "description": "",
+            "duration": 10,
+            "type": "Self"
+        },
+        {
+            "title": "Skin Care",
+            "description": "",
+            "duration": 10,
+            "type": "Self"
+        },
+        {
+            "title": "Hair Care",
+            "description": "",
+            "duration": 10,
+            "type": "Self"
+        },
+        {
+            "title": "Night Drink && Next Day ToDo List",
+            "duration": 10,
+            "description": "",
+            "type": "Self"  
+        },
+        {
+            "title": "Night Meditation",
+            "description": "",
+            "duration": 10,
+            "type": "Self"
+        },
+        {
+            "title": "Sleep",
+            "description": "",
+            "type": "Sleep",
+            "duration": 60,
+            "startTime": "23:00"
+        }
+    ]
+}
