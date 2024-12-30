@@ -1,0 +1,676 @@
+//@version=5
+indicator("3rdWaveSetup", overlay=true, max_labels_count=500)
+
+rsiLength = input.int(14, title="RSI Length") 
+RSINeutral = input.int(50, title="Neutral")
+RSIStrongBuy = input.int(60, title="Strong Buy above")
+RSIStrongSell = input.int(40, title="Strong Sell Below")
+rsioverbought = input.int(80, title="OverBought above")
+rsioversold = input.int(20, title="Oversold below")
+RSISwingBuy = input.int(40, title="Swing Buy above")
+RSISwingSell = input.int(60, title="Swing Sell below")
+
+rsiValue = ta.rsi(close, rsiLength)
+
+// Color definitions
+neutralColor = color.white
+bullishColor = color.new(color.green,0)// color.new(color.dark_green, 0)
+overboughtColor = color.new(color.green, 0)
+bearishColor = color.new(color.red, 0)
+oversoldColor = color.new(color.red, 0)
+
+// Color conditions
+RSICOLOR = rsiValue > rsiValue[1] ? bullishColor :
+             rsiValue < rsiValue[1] ? bearishColor :             
+             neutralColor
+
+RSISIGNAL = rsiValue > rsiValue[1] and rsiValue > RSIStrongBuy ? "STRONG BUY" : 
+     rsiValue < rsiValue[1] and rsiValue < RSIStrongSell ? "STRONG SELL" :
+     rsiValue > rsiValue[1] and rsiValue > RSIStrongSell and rsiValue < RSIStrongBuy ? "SWING BUY" :
+     rsiValue < rsiValue[1] and rsiValue > RSIStrongSell and rsiValue < RSIStrongBuy ? "SWING Sell" :
+     rsiValue > rsiValue[1] ? "BUY" :
+     rsiValue < rsiValue[1] ? "SELL" :
+     "Neutral"
+
+RSIZOME = rsiValue >= rsioverbought ? "OVERBOUGHT": 
+     rsiValue <= rsioversold ? "OVERSOLD": 
+     rsiValue < RSIStrongSell and rsiValue > rsiValue[1] ? "BUY": 
+     rsiValue > RSIStrongBuy and rsiValue < rsiValue[1] ? "SELL": 
+     rsiValue > RSIStrongBuy and rsiValue < rsioverbought ? "MOMENTUM": 
+     rsiValue < RSIStrongSell and rsiValue > rsioversold ? "MOMENTUM":
+     rsiValue > RSIStrongSell and rsiValue < RSIStrongBuy ? "SWING":
+     "Neutral"
+
+// STOCH
+kPeriod = input(14, title="K Period")
+dPeriod = input(3, title="D Period")
+smoothPeriod = input(3, title="Smooth Period")
+stochOverBought = input(80, title="Stoch OverBought")
+stochOverSold = input(20, title="Stoch OverSold")
+
+kValue = ta.sma(ta.stoch(close, high, low, kPeriod), smoothPeriod)
+dValue = ta.sma(kValue, dPeriod)
+
+// Color conditions
+STOCHCOLOR = kValue > kValue[1] ? bullishColor :
+             kValue < kValue[1] ? bearishColor :             
+                          neutralColor
+
+STOCHSIGNAL = kValue > kValue[1] and kValue <  stochOverSold ? "Storng Buy" : 
+     kValue > kValue[1] and kValue >  stochOverBought ? "Weak Buy" : 
+     kValue < kValue[1] and kValue >  stochOverBought ? "Strong Sell" : 
+     kValue < kValue[1] and kValue <  stochOverSold ? "Weak Sell" :
+     kValue > kValue[1] and kValue >  stochOverSold  and kValue <  stochOverBought ? "BUY" :
+     kValue < kValue[1] and kValue >  stochOverSold  and kValue <  stochOverBought ? "Sell" :
+     "Neutral"
+
+STOCHZONE = kValue >= stochOverBought ? "OVERBOUGHT": 
+     kValue <= stochOverSold ? "OVERSOLD": 
+     "MIDLE"
+
+// EMA
+
+ema5 = ta.ema(close, 5)
+ema13 = ta.ema(close, 13)
+ema0 = ta.ema(close, 20)
+ema26 = ta.ema(close, 26)
+ema50 = ta.ema(close, 50)
+
+LTPValue = close
+ema50Signal = LTPValue > ema50 ? "BUY" : "SELL"
+ema50Zone = LTPValue > ema50 ? "Bullish" : "Bearish"
+ema50Value = LTPValue > ema50 ? "Above 50 EMA" : "Below 50 EMA"
+ema50Color =  LTPValue > ema50 ? bullishColor : bearishColor
+
+EMASIGNAL = ema5 > ema13 ? "BUY" : "SELL"
+
+EMACOLOR = ema5 > ema13  ? bullishColor : bearishColor
+
+EMAZONE = ema5 > ema13 ? "BULLISH" : "BEARISH"
+
+EAVALUE = ema5 > ema13 and ema5 <  ema26 ? "5 > 13" : ema5 > ema13 and ema5 >  ema26 ? "5 > 13 > 26" : ema5 < ema13 and ema5 <  ema26 ? "5 < 13 < 26" : "5 < 13"
+
+// MACD
+
+MACDTIME = timeframe.period == "3" ? "5" :
+     timeframe.period == "1" ? "3" :
+     timeframe.period == "5" ? "15" :
+     timeframe.period == "15" ? "60" :
+     timeframe.period == "60" ? "D" :   
+     timeframe.period == "D" ? "W" : 
+     timeframe.period == "W" ? "M" :
+     timeframe.period
+
+// Inputs
+fastLength = input(12, title="Fast Length")
+slowLength = input(26, title="Slow Length")
+signalLength = input(9, title="Signal Length")
+src = input(close, title="Source")
+
+// Calculate MACD TIDE
+[macdLine, signalLine, _] = ta.macd(src, fastLength, slowLength, signalLength)
+
+macdtide = request.security(syminfo.tickerid, MACDTIME, macdLine)
+
+MACDSIGNAL = macdtide > macdtide[1] or (macdtide[1] < macdtide[2] and macdtide == macdtide[1]) ? "BUY" : "SELL"
+
+MACDCOLOR = macdtide > macdtide[1] or (macdtide[1] < macdtide[2] and macdtide == macdtide[1])  ? bullishColor : bearishColor
+
+MACDZONE = macdtide > macdtide[1] or (macdtide[1] < macdtide[2] and macdtide == macdtide[1]) ? "BULLISH" : "BEARISH"
+
+MACDPOSITION = macdtide > 0 ? "Above Zero" : "Below Zero"
+
+// Calculate MACD Wave
+fast_ma = ta.ema(close, fastLength)
+slow_ma = ta.ema(close, slowLength)
+macd = fast_ma - slow_ma
+signal = ta.sma(macd, signalLength)
+
+
+MACDSIGNALWAVE = macd > macd[1] or (macd[1] < macd[2] and macd == macd[1]) ? "BUY" : "SELL"
+
+MACDCOLORWAVE = macd > macd[1] or (macd[1] < macd[2] and macd == macd[1]) ? bullishColor : bearishColor
+
+MACDZONEWAVE = macd > macd[1] or (macd[1] < macd[2] and macd == macd[1]) ? "BULLISH" : "BEARISH"
+
+MACDPOSITIONWAVE = macd > 0 ? "Above Zero" : "Below Zero"
+
+//  TIDE EMA 50
+ema50Tide = request.security(syminfo.tickerid, MACDTIME, ta.ema(close, 50))
+ema50SignalTide = LTPValue > ema50Tide ? "BUY" : "SELL"
+ema50ZoneTide = LTPValue > ema50Tide ? "Bullish" : "Bearish"
+ema50ValueTide = LTPValue > ema50Tide ? "Above 50 EMA" : "Below 50 EMA"
+ema50ColorTide =  LTPValue > ema50Tide ? bullishColor : bearishColor
+
+// Volumn
+
+// Input parameters
+maLength = input(20, title="MA Length")
+
+// Get volume data
+volumeData = volume
+
+// Calculate Moving Average (MA) of volume
+volumeMA = ta.sma(volumeData, maLength)
+
+VolumeSignal = volumeData > volumeMA ? "Above Avg" : "Below Avg"
+
+// DMI
+
+// Length for the smoothing of +DI and -DI
+len = input(14, title="DI Length")
+
+// Calculate True Range (TR)
+tr = math.max(math.max(high - low, math.abs(high - close[1])), math.abs(low - close[1]))
+
+// Calculate Plus Directional Movement (+DM) and Minus Directional Movement (-DM)
+plusDM = na(high - high[1]) ? 0 : (high > high[1] ? high - high[1] : 0)
+minusDM = na(low[1] - low) ? 0 : (low[1] > low ? low[1] - low : 0)
+
+// Calculate Smoothed True Range (ATR)
+atr = ta.ema(tr, len)
+
+// Calculate Smoothed Plus Directional Indicator (+DI)
+plusDI = math.round(100 * ta.ema(plusDM, len) / atr,2)
+
+// Calculate Smoothed Minus Directional Indicator (-DI)
+minusDI = math.round(100 * ta.ema(minusDM, len) / atr,2)
+
+// Calculate the Average Directional Index (ADX)
+DX = 100 * math.abs(plusDI - minusDI) / (plusDI + minusDI)
+ADX = ta.ema(DX, len)
+
+DMISIGNAL = plusDI > minusDI ? "BUY" : "SELL"
+
+DMICOLOR = plusDI > minusDI  ? bullishColor : bearishColor
+
+DMIZONE = plusDI > minusDI ? "BULLISH" : "BEARISH"
+
+DMIPOSITION = plusDI > minusDI ? " +DI > -DI" :
+              "-DI > +DI"
+
+ADXSIGNAL = ADX >= 12 and ADX < 15 ? "GOOD" : 
+          ADX >= 15 and ADX < 22 ? "BETTER" : 
+          ADX >= 22 and ADX < 55 ? "BEST" : 
+          ADX >= 55 ? "Unsustainable" : 
+          "NEUTRAL"            
+
+basis = request.security(syminfo.tickerid, MACDTIME, ta.sma(close, 20))
+dev = request.security(syminfo.tickerid, MACDTIME, ta.stdev(close, 20))
+TideUpperBB = basis + 2 * dev
+TideLowerBB = basis - 2 * dev
+
+TideLow = request.security(syminfo.tickerid, MACDTIME, low)
+TideHigh = request.security(syminfo.tickerid, MACDTIME, high)
+
+Wavelength = input(20, title="BB Length")
+Wavesrc = input(close, title="Source")
+Wavemult = input(2.0, title="Multiplier")
+
+Wavebasis = ta.sma(Wavesrc, Wavelength)
+Wavedev = Wavemult * ta.stdev(Wavesrc, Wavelength)
+WaveupperBB = Wavebasis + Wavedev
+WavelowerBB = Wavebasis - Wavedev
+
+// BUY Signal
+//TIDE conditional
+TideBBNotChallangedDlwnside = TideLowerBB < TideLow
+TidemacdUptick = macdtide > macdtide[1]
+TideAbove50EMA = LTPValue > ema50Tide
+//WAVE conditional
+UpperBBChallanged = high >= WaveupperBB and low <= WaveupperBB
+RsiUptick = rsiValue > rsiValue[1]
+RSIAbove60 = rsiValue > RSIStrongBuy
+BuyDMI = plusDI > minusDI 
+ADXAbove12 = ADX > 12
+ADXUpTick = ADX > ADX[1]
+PriceAbove50EMA = LTPValue > ema50
+BuySTOCH = kValue > kValue[1]
+
+// Sell Signal
+//TIDE conditional
+TideBBNotChallangedUPnside = TideUpperBB > TideHigh
+TidemacdDowntick = macdtide < macdtide[1]
+TideBelow50EMA = LTPValue < ema50Tide
+//WAVE conditional
+LowerBBChallanged = high >= WavelowerBB and low <= WavelowerBB
+RsiDowntick = rsiValue < rsiValue[1]
+RSIBelow40 = rsiValue < RSIStrongSell
+SellDMI = plusDI < minusDI 
+ADXBelow12 = ADX > 12
+ADXDownTick = ADX > ADX[1]
+PriceBelow50EMA = LTPValue < ema50
+SellSTOCH = kValue < kValue[1]
+
+// Track if a buy signal has been generated
+var buy_signal = false
+buy_condition = TideBBNotChallangedDlwnside and TidemacdUptick and RsiUptick and UpperBBChallanged and RSIAbove60 and BuyDMI and ADXAbove12 and ADXUpTick and PriceAbove50EMA and not buy_signal
+
+// Track if a Exit signal has been generated
+var buy_Exit_signal = false
+buy_Exit_condition = (close < ema5 and buy_signal)
+     
+// When the buy condition is met, set buy_signal to true
+if (buy_condition)
+    buy_signal := true
+
+// When the Exit condition is met, set buy_signal to false
+if (buy_Exit_condition)
+    buy_signal := false
+
+// Plot buy arrow when both conditions are met
+plotshape(buy_condition , title="Buy Signal", text = 'Strong Buy', location=location.belowbar, color=color.green, textcolor = color.white, style = shape.labelup, size=size.small)
+plotshape(buy_Exit_condition , title="Buy Exit Signal", text = 'Strong Buy Exit', location=location.abovebar, color=color.black, textcolor = color.white, style = shape.labeldown, size=size.small)
+// plotshape(TideBBNotChallangedUPnside and TidemacdDowntick and RsiDowntick and LowerBBChallanged and RSIBelow40 and SellDMI and ADXBelow12 and ADXDownTick and PriceBelow50EMA , title="Buy Signal", text = 'Sell', location=location.abovebar, color=color.red, textcolor = color.white, style = shape.labeldown, size=size.small)
+//plotshape(TideBBNotChallangedDlwnside and TidemacdUptick and UpperBBChallanged and RsiUptick and RSIAbove60 and DMI and ADXAbove12 and ADXUpTick and PriceAbove50EMA , title="Sell Signal", text = 'Buy', location=location.belowbar, color=color.green, textcolor = color.white, style = shape.labelup, size=size.small)
+
+alertcondition(buy_condition, title="Buy Signal", message="Buy Signal - 3rd wave setup")
+
+// Track if a buy signal has been generated
+var Sell_signal = false
+Sell_condition = TideBBNotChallangedUPnside and TidemacdDowntick and RsiDowntick and LowerBBChallanged and RSIBelow40 and SellDMI and ADXBelow12 and ADXDownTick and PriceBelow50EMA and not Sell_signal
+
+// Track if a Exit signal has been generated
+var Sell_Exit_signal = false
+Sell_Exit_condition = (close > ema5 and Sell_signal)
+     
+// When the buy condition is met, set buy_signal to true
+if (Sell_condition)
+    Sell_signal := true
+
+// When the Exit condition is met, set buy_signal to false
+if (Sell_Exit_condition)
+    Sell_signal := false
+
+plotshape(Sell_condition , title="Sell Signal", text = 'Strong Sell', location=location.abovebar, color=color.red, textcolor = color.white, style = shape.labeldown, size=size.small)
+plotshape(Sell_Exit_condition , title="Sell Exit Signal", text = 'Strong Sell Exit', location=location.belowbar, color=color.black, textcolor = color.white, style = shape.labelup, size=size.small)
+
+alertcondition(Sell_condition, title="Sell Signal", message="Sell Signal 3rd wave setup")
+
+// Table 
+showTable  = input.bool(true, "Show Table")
+
+tablePosInput = input.string(title="Position", defval="Top Right", options=["Bottom Left", "Bottom Right", "Top Left", "Top Right"], tooltip="Select where you want the table to draw.")
+var tablePos  = tablePosInput == "Bottom Left" ? position.bottom_left : tablePosInput == "Bottom Right" ? position.bottom_right : tablePosInput == "Top Left" ? position.top_left : tablePosInput == "Top Right" ? position.top_right : na
+
+var dataTable = table.new(tablePos, columns = 10, rows = 12, border_color = color.black, border_width = 2)
+
+if showTable
+    table.cell(dataTable, 1, 1, text = "Data Table", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 1, text = "Signal", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 3, 1, text = "ZONE", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 4, 1, text = "VALUE", bgcolor = color.black, text_color = color.white) 
+
+    table.cell(dataTable, 1, 2, text = "RSI", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 2, RSISIGNAL, bgcolor = RSICOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 2, RSIZOME, bgcolor = RSICOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 2, str.tostring(math.round(rsiValue,2)), bgcolor = RSICOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 3, text = "STOCH", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 3, STOCHSIGNAL, bgcolor = STOCHCOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 3, STOCHZONE, bgcolor = STOCHCOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 3, str.tostring(math.round(kValue,2)), bgcolor = STOCHCOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 4, text = "EMA", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 4, EMASIGNAL, bgcolor = EMACOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 4, EMAZONE, bgcolor = EMACOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 4, EAVALUE, bgcolor = EMACOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 5, text = "MACD TIDE ", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 5, MACDSIGNAL, bgcolor = MACDCOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 5, MACDZONE, bgcolor = MACDCOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 5, str.tostring(MACDPOSITION), bgcolor = MACDCOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 6, text = "MACD TIDE WAVE ", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 6, MACDSIGNALWAVE, bgcolor = MACDCOLORWAVE, text_color = color.white) 
+    table.cell(dataTable, 3, 6, MACDZONEWAVE, bgcolor = MACDCOLORWAVE, text_color = color.white) 
+    table.cell(dataTable, 4, 6, str.tostring(MACDPOSITIONWAVE), bgcolor = MACDCOLORWAVE, text_color = color.white) 
+
+    table.cell(dataTable, 1, 7, text = "DMI ", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 7, str.tostring(plusDI), bgcolor = DMICOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 7, str.tostring(minusDI), bgcolor = DMICOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 7, str.tostring(DMIPOSITION), bgcolor = DMICOLOR, text_color = color.white) 
+    //table.cell(dataTable, 4, 7, str.tostring(WaveupperBB), bgcolor = DMICOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 8, text = "ADX ", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 8, ADXSIGNAL, bgcolor = DMICOLOR, text_color = color.white) 
+    table.cell(dataTable, 3, 8, ADXSIGNAL, bgcolor = DMICOLOR, text_color = color.white) 
+    table.cell(dataTable, 4, 8, str.tostring(math.round(ADX,1)), bgcolor = DMICOLOR, text_color = color.white) 
+
+    table.cell(dataTable, 1, 9, text = "EMA50_Tide", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 9, ema50SignalTide, bgcolor = ema50ColorTide, text_color = color.white)   
+    table.cell(dataTable, 3, 9, ema50ZoneTide, bgcolor = ema50ColorTide, text_color = color.white) 
+    table.cell(dataTable, 4, 9, ema50ValueTide, bgcolor = ema50ColorTide, text_color = color.white) 
+
+    table.cell(dataTable, 1, 10, text = "EMA50_Wave", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 10, ema50Signal, bgcolor = ema50Color, text_color = color.white)   
+    table.cell(dataTable, 3, 10, ema50Zone, bgcolor = ema50Color, text_color = color.white) 
+    table.cell(dataTable, 4, 10, ema50Value, bgcolor = ema50Color, text_color = color.white) 
+
+    table.cell(dataTable, 1, 11, text = "VOLUME ", bgcolor = color.black, text_color = color.white) 
+    table.cell(dataTable, 2, 11, text = "", bgcolor = color.white, text_color = color.black)   
+    table.cell(dataTable, 3, 11, VolumeSignal, bgcolor = color.white, text_color = color.black) 
+    table.cell(dataTable, 4, 11, VolumeSignal, bgcolor = color.white, text_color = color.black) 
+
+
+
+
+
+// Input parameters
+length = input.int(5, title="Length", minval=1)
+
+// --------------------------------------------------------------------------
+// Day High Mid and Low 
+// --------------------------------------------------------------------------
+var float hh = na
+var float ll = na
+var float mid = na
+var int startTime = na
+
+// Function to check if the current bar is within the first 30 minutes
+isFirst30Minutes() =>
+    hour == input.int(9, title="Start Hour") and minute <= input.int(30, title="Start Minute")
+
+// Reset values at the start of a new day
+if (dayofweek != dayofweek[1])
+    hh := na
+    ll := na
+    mid := na
+    startTime := na
+
+// Calculate and plot the first 30 minutes high and low
+if (isFirst30Minutes())
+    if (na(startTime))
+        startTime := time
+        hh := high
+        ll := low
+        mid := math.avg(hh, ll)
+    else
+        hh := math.max(hh, high)
+        ll := math.min(ll, low)
+        mid := math.avg(hh, ll)
+
+
+plotshape(series=isFirst30Minutes(), title="First 30 Minutes", location=location.belowbar, color=color.new(color.green, 0), size=size.small)
+plot(hh, color=color.new(color.green, 0), title="Day High", linewidth=3)
+plot(ll, color=color.new(color.red, 0), title="Day Low", linewidth=3)
+plot(mid, color=color.new(color.orange, 0), title="Day Mid", linewidth=3)
+
+// Day High Crossed
+dayHighCrossed = ta.crossover(close, hh)
+// plotshape(series=dayHighCrossed,  color=#44ce1b, text = 'Day High Crossed', textcolor = #ffffff, style=shape.labelup, size=size.tiny, location=location.belowbar)
+if dayHighCrossed
+    alert('Cross over day high', alert.freq_once_per_bar_close)
+
+// Day Low Crossed
+dayLowCrossed = ta.crossunder(close, ll)
+// plotshape(series=dayLowCrossed,  color=#f30000, text = 'Day Low Crossed', textcolor = #ffffff, style=shape.labeldown, size=size.tiny, location=location.abovebar)
+if dayLowCrossed
+    alert('Cross down day low', alert.freq_once_per_bar_close)
+
+// 
+vwap = ta.vwap(close)
+plot(vwap, color=color.new(color.blue, 0), title="VWAP", linewidth=3)
+
+
+plot(ema50, color=color.new(color.gray, 0), title="ema50", linewidth=3)
+
+// plot(ema5, color=color.new(color.lime, 0), title="ema50", linewidth=3)
+  
+// --------------------------------------------------------------------------
+// Madrid Trend Spotter
+// --------------------------------------------------------------------------
+
+
+//
+toggleBreaks  = input(true, title = "Show Breaks" )
+leftBars  = input(2, title = "Left Bars ")
+rightBars  = input(2, title = "Right Bars")
+volumeThresh  = input(2, title = "Volume Threshold")
+//
+float highUsePivot = fixnan(ta.pivothigh(leftBars, rightBars)[1])
+float lowUsePivot = fixnan(ta.pivotlow(leftBars, rightBars)[1])
+r1 = plot(highUsePivot, color=ta.change(highUsePivot) ? na : #ff008c,  linewidth=3, offset=-(rightBars+1), title="Resistance")
+s1 = plot(lowUsePivot, color=ta.change(lowUsePivot) ? na : #4837a7,  linewidth=3, offset=-(rightBars+1), title="Support")
+
+//Volume %
+short = ta.ema(volume, 5)
+long = ta.ema(volume, 10)   
+osc = 100 * (short - long) / long
+
+
+//For breaks with volume
+plotshape(toggleBreaks and ta.crossunder(close,lowUsePivot) and not (open - close < high - open) and osc > volumeThresh, title = "Break", text = 'S', style = shape.labeldown, location = location.abovebar, color= color.red,textcolor = color.white, size = size.tiny)
+plotshape(toggleBreaks and ta.crossover(close,highUsePivot ) and not(open - low > close - open) and osc > volumeThresh, title = "Break", text = 'B', style = shape.labelup, location = location.belowbar, color= color.green,textcolor = color.white, size = size.tiny)
+
+//For bull / bear wicks
+plotshape(toggleBreaks and ta.crossover(close,highUsePivot ) and open - low > close - open , title = "Break", text = 'Bull Wick', style = shape.labelup, location = location.belowbar, color= color.green,textcolor = color.white,  size = size.tiny)
+plotshape(toggleBreaks and ta.crossunder(close,lowUsePivot) and open - close < high - open , title = "Break", text = 'Bear Wick', style = shape.labeldown, location = location.abovebar, color= color.red,textcolor = color.white,  size = size.tiny)
+
+
+if (ta.crossunder(close,lowUsePivot) and osc > volumeThresh)
+    alert("Support Broken", alert.freq_once_per_bar_close)
+
+if (ta.crossover(close,highUsePivot) and osc > volumeThresh)
+    alert("Resistance Broken", alert.freq_once_per_bar_close)
+
+
+
+
+// --------------------------------------------------------------------------
+// Madrid Trend Spotter
+// --------------------------------------------------------------------------
+// src = input(close, title="Source")
+fastLen = input.int(5,  title="Fast Length", minval=1)
+slowLen = input.int(10, title="Slow Length", minval=1)
+ema = input.bool(true, title="Exponential Moving Average")
+
+maColor(fma, sma) =>
+    fma > sma and ta.change(fma - sma, 3) > 0 ? color.new(color.lime, 0) : fma < sma and ta.change(fma - sma, 3) < 0 ? color.new(color.red, 0) : color.new(color.yellow, 0)
+
+fastMA = ema ? ta.ema(src, fastLen) : ta.sma(src, fastLen)
+slowMA = ema ? ta.ema(src, slowLen) : ta.sma(src, slowLen)
+
+fastMAP = plot(fastMA, color=maColor(fastMA, slowMA), linewidth=3, title="fastTrend")
+slowMAP = plot(slowMA, color=maColor(fastMA, slowMA), linewidth=3, title="slowTrend")
+fill(fastMAP, slowMAP, color=maColor(fastMA, slowMA), transp=70, title="Area")
+upCrossover = ta.crossover(fastMA, slowMA)
+plotshape(series=upCrossover,  color=#44ce1b, text = 'B', textcolor = #ffffff, style=shape.labelup, size=size.tiny, location=location.belowbar)
+if(upCrossover)
+    alert("Fast crossed above Slow MA 5", alert.freq_once_per_bar_close)
+downCrossunder = ta.crossunder(fastMA, slowMA)
+plotshape(series=downCrossunder,  color=#f30000, text = 'S', textcolor = #ffffff, style=shape.labeldown, size=size.tiny, location=location.abovebar)
+if(downCrossunder)
+    alert("Fast crossed below Slow MA 5", alert.freq_once_per_bar_close)
+
+//-----------------------------------------------------------------------------}
+
+//------------------------------------------------------------------------------
+//Settings
+//-----------------------------------------------------------------------------{
+mult = input.float(0.5, 'Slope', minval = 0, step = .1)
+calcMethod = input.string('Atr', 'Slope Calculation Method', options = ['Atr','Stdev','Linreg'])
+backpaint = input(true, tooltip = 'Backpainting offset displayed elements in the past. Disable backpainting to see real time information returned by the indicator.')
+
+//Style
+upCss = input.color(color.green, 'Up Trendline Color', group = 'Style')
+dnCss = input.color(color.red, 'Down Trendline Color', group = 'Style')
+showExt = input(true, 'Show Extended Lines')
+
+//-----------------------------------------------------------------------------}
+//Calculations
+//-----------------------------------------------------------------------------{
+var upper = 0.
+var lower = 0.
+var slope_ph = 0.
+var slope_pl = 0.
+
+var offset = backpaint ? length : 0
+
+n = bar_index
+// src = close
+
+ph = ta.pivothigh(length, length)
+pl = ta.pivotlow(length, length)
+
+//Slope Calculation Method
+slope = switch calcMethod
+    'Atr'    => ta.atr(length) / length * mult
+    'Stdev'  => ta.stdev(src,length) / length * mult
+    'Linreg' => math.abs(ta.sma(src * n, length) - ta.sma(src, length) * ta.sma(n, length)) / ta.variance(n, length) / 2 * mult
+
+//Get slopes and calculate trendlines
+slope_ph := ph ? slope : slope_ph
+slope_pl := pl ? slope : slope_pl
+
+upper := ph ? ph : upper - slope_ph
+lower := pl ? pl : lower + slope_pl
+
+var upos = 0
+var dnos = 0
+upos := ph ? 0 : close > upper - slope_ph * length ? 1 : upos
+dnos := pl ? 0 : close < lower + slope_pl * length ? 1 : dnos
+
+//-----------------------------------------------------------------------------}
+//Extended Lines
+//-----------------------------------------------------------------------------{
+var uptl  = line.new(na,na,na,na, color = upCss, style = line.style_dashed, extend = extend.right)
+var dntl  = line.new(na,na,na,na, color = dnCss, style = line.style_dashed, extend = extend.right)
+
+if ph and showExt
+    uptl.set_xy1(n-offset, backpaint ? ph : upper - slope_ph * length)
+    uptl.set_xy2(n-offset+1, backpaint ? ph - slope : upper - slope_ph * (length+1))
+
+if pl and showExt
+    dntl.set_xy1(n-offset, backpaint ? pl : lower + slope_pl * length)
+    dntl.set_xy2(n-offset+1, backpaint ? pl + slope : lower + slope_pl * (length+1))
+
+//-----------------------------------------------------------------------------}
+//Plots
+//-----------------------------------------------------------------------------{
+plot(backpaint ? upper : upper - slope_ph * length, 'Upper', color = ph ? na : upCss, offset = -offset)
+plot(backpaint ? lower : lower + slope_pl * length, 'Lower', color = pl ? na : dnCss, offset = -offset)
+
+//Breakouts
+plotshape(upos > upos[1] ? low : na, "Upper Break"
+  , shape.labelup
+  , location.absolute
+  , #bbdb44
+  , text = "B"
+  , textcolor = color.white
+  , size = size.tiny)
+
+plotshape(dnos > dnos[1] ? high : na, "Lower Break"
+  , shape.labeldown
+  , location.absolute
+  , #f2a134
+  , text = "S"
+  , textcolor = color.white
+  , size = size.tiny)
+
+if upos > upos[1]
+    alert('Upward Breakout', alert.freq_once_per_bar_close)
+
+if dnos > dnos[1]
+    alert('Downward Breakout', alert.freq_once_per_bar_close)
+
+// ----------------------------------------------------------------------
+
+
+// General inputs
+shc = input.bool(true, title="Plot TEMA?")  // Plot Triple EMA
+cc = input.bool(true, title="Green/redshift on/off?")  // Trend color change?
+showtext = input.bool(true, title="Show buy/sell?")  // Show buy & sell signals?
+uselabel = input.bool(true, title="Use labels? (max 50)") // Use labels or plotshape?
+showperc = input.bool(false, title="Show % change since last buy/sell")
+nfilter = input.bool(true, title="Noise filter on/off?")
+useCurrentRes = input.bool(true, title="Use Current Chart Resolution for filter?")
+resCustom = input.timeframe(title="Use Different Timeframe for filter? Uncheck Box Above", defval="60")
+len1 = input.int(14, title="TEMA period")
+FfastLength = input.int(12, minval=1, title="Filter fast length")
+FslowLength = input.int(26, minval=1, title="Filter slow length")
+FsignalLength = input.int(9, minval=1, title="Filter signal length")
+
+// Get real close price
+realC = request.security(syminfo.tickerid, timeframe.period, close)
+
+// Access previous candle details
+previousOpen = request.security(syminfo.tickerid, timeframe.period, open[1])
+previousHigh = request.security(syminfo.tickerid, timeframe.period, high[1])
+previousLow = request.security(syminfo.tickerid, timeframe.period, low[1])
+previousClose = request.security(syminfo.tickerid, timeframe.period, close[1])
+
+// Persistent variables
+var float buyprice = na
+var float sellprice = na
+var bool last_tran = na
+
+// Truncate function used for rounding variables
+truncate(number, decimals) =>
+    factor = math.pow(10, decimals)
+    math.round(number * factor) / factor
+
+// Triple EMA definition
+ema1 = ta.ema(realC, len)
+ema2 = ta.ema(ema1, len)
+ema3 = ta.ema(ema2, len)
+// ema5 = ta.ema(ema2, 5)
+
+// Triple EMA trend calculation
+avg = 3 * (ema1 - ema2) + ema3
+out = avg
+out1 = request.security(syminfo.tickerid, timeframe.period, out)
+ma_up = out1 >= out1[1]
+ma_down = out1 < out1[1]
+col = cc ? (ma_up ? color.lime : color.red) : color.aqua
+t_UP = ma_up
+t_DOWN = ma_down
+t_NON = t_UP == t_DOWN
+
+// Filter formula
+Fsource = close
+Fres = useCurrentRes ? timeframe.period : resCustom
+FfastMA = ta.ema(Fsource, FfastLength)
+FslowMA = ta.ema(Fsource, FslowLength)
+Fmacd = FfastMA - FslowMA
+Fsignal = ta.sma(Fmacd, FsignalLength)
+outMacD = request.security(syminfo.tickerid, Fres, Fmacd)
+outSignal = request.security(syminfo.tickerid, Fres, Fsignal)
+Fbuy = (outMacD >= outSignal) or not nfilter
+Fsell = (outMacD < outSignal) or not nfilter
+
+// Triple EMA plot
+plot(out1, title="TEMA", style=plot.style_line, linewidth=2, color=col, transp=shc ? 0 : 100)
+
+// Entry & exit conditions
+long_ = t_UP and not last_tran and not t_NON and Fbuy and barstate.isconfirmed
+short_ = t_DOWN and last_tran and not t_NON and Fsell and barstate.isconfirmed
+
+if long_
+    buyprice := realC  // Set buyprice
+    last_tran := true  // Set long condition
+if short_
+    sellprice := realC  // Set sellprice
+    last_tran := false  // Set short condition
+
+var float PercVal = na
+PercVal := last_tran ? 100 * (realC - buyprice) / buyprice : 100 * (realC - sellprice) / sellprice
+
+PercCol = na(PercVal) ? color.gray : (PercVal >= 0 ? color.lime : color.orange)
+
+
+// Plot percent label
+if showperc
+    var label percLab = na
+    label.delete(percLab)
+    percLab := label.new(bar_index, high, text= str.tostring(truncate(PercVal, 2)) + " %", color=color.black, textcolor=PercCol, style=label.style_none)
+
+// Buy/sell signal labels
+if uselabel and long_ and showtext
+    label.new(bar_index, high, "B", yloc=yloc.belowbar, color=color.lime, textcolor=color.white, style=label.style_label_up, size=size.small)
+if uselabel and short_ and showtext
+    label.new(bar_index, high, "S", yloc=yloc.abovebar, color=color.red, textcolor=color.white, style=label.style_label_down, size=size.small)
+
+// Alternative buy/sell signals using plotshape
+plotshape(not uselabel and long_ and showtext, title="Buy alert", color=color.lime, transp=0, style=shape.triangleup, size=size.small, location=location.belowbar)
+plotshape(not uselabel and short_ and showtext, title="Sell alert", color=color.red, transp=0, style=shape.triangledown, size=size.small, location=location.abovebar)
