@@ -1,11 +1,7 @@
 //@version=5
-strategy("algo-trade-indian", shorttitle="algo-trade-indian", overlay=true, initial_capital = 100000, default_qty_value = 10)
+strategy("algo-trade-indian", shorttitle="algo-trade-indian", overlay=true)
 
-len = 5
-
-// Input parameters
-length = input.int(len, title="Length", minval=1)
-
+ 
 // --------------------------------------------------------------------------
 // Day High Mid and Low 
 // --------------------------------------------------------------------------
@@ -16,7 +12,7 @@ var int startTime = na
 
 // Function to check if the current bar is within the first 30 minutes
 isFirst30Minutes() =>
-    hour == input.int(9, title="Start Hour") and minute <= input.int(30, title="Start Minute")
+    hour == input.int(9, title="End Hour") and minute <= input.int(30, title="End Minute")
 
 // Reset values at the start of a new day
 if (dayofweek != dayofweek[1])
@@ -43,36 +39,26 @@ plot(hh, color=color.new(color.green, 0), title="Day High", linewidth=3)
 plot(ll, color=color.new(color.red, 0), title="Day Low", linewidth=3)
 plot(mid, color=color.new(color.orange, 0), title="Day Mid", linewidth=3)
 
-// Day High Crossed
-dayHighCrossed = ta.crossover(close, hh)
-// plotshape(series=dayHighCrossed,  color=#44ce1b, text = 'Day High Crossed', textcolor = #ffffff, style=shape.labelup, size=size.tiny, location=location.belowbar)
-if dayHighCrossed
+if ta.crossover(close, hh) and ta.crossover(close[1], hh)
     alert('Cross over day high', alert.freq_once_per_bar_close)
 
-// Day Low Crossed
-dayLowCrossed = ta.crossunder(close, ll)
-// plotshape(series=dayLowCrossed,  color=#f30000, text = 'Day Low Crossed', textcolor = #ffffff, style=shape.labeldown, size=size.tiny, location=location.abovebar)
-if dayLowCrossed
+if ta.crossunder(close, ll) and ta.crossover(close[1], ll)
     alert('Cross down day low', alert.freq_once_per_bar_close)
 
-// 
-vwap = ta.vwap(close)
-plot(vwap, color=color.new(color.blue, 0), title="VWAP", linewidth=3)
 
-// 
-ema50 = ta.ema(close, 50)
-plot(ema50, color=color.new(color.gray, 0), title="ema50", linewidth=3)
-  
 // --------------------------------------------------------------------------
 // Madrid Trend Spotter
 // --------------------------------------------------------------------------
+len = 5
 
+// Input parameters
+length = input.int(len, title="Length", minval=1)
 
 //
 toggleBreaks  = input(true, title = "Show Breaks" )
-leftBars  = input(2, title = "Left Bars ")
-rightBars  = input(2, title = "Right Bars")
-volumeThresh  = input(2, title = "Volume Threshold")
+leftBars  = input(len, title = "Left Bars ")
+rightBars  = input(len, title = "Right Bars")
+volumeThresh  = input(len * 2, title = "Volume Threshold")
 //
 float highUsePivot = fixnan(ta.pivothigh(leftBars, rightBars)[1])
 float lowUsePivot = fixnan(ta.pivotlow(leftBars, rightBars)[1])
@@ -131,7 +117,7 @@ if(downCrossunder)
 //------------------------------------------------------------------------------
 //Settings
 //-----------------------------------------------------------------------------{
-mult = input.float(0.5, 'Slope', minval = 0, step = .1)
+mult = input.float(1., 'Slope', minval = 0, step = .1)
 calcMethod = input.string('Atr', 'Slope Calculation Method', options = ['Atr','Stdev','Linreg'])
 backpaint = input(true, tooltip = 'Backpainting offset displayed elements in the past. Disable backpainting to see real time information returned by the indicator.')
 
@@ -222,104 +208,67 @@ if dnos > dnos[1]
 //-----------------------------------------------------------------------------}
 // AlgoTrade
 //-----------------------------------------------------------------------------{
-// Define your data
-symbol = syminfo.ticker
-price = close
-instrument = syminfo.prefix
-//-----------------------------------------------------------------------------{
+
 // Define intraday time range (e.g., 09:30 AM to 03:30 PM)
-intradayStartTime = timestamp(year, month, dayofmonth, 09, 30)
-intradayEndTime = instrument == 'NSE' ? timestamp(year, month, dayofmonth, 15, 09) : timestamp(year, month, dayofmonth, 23, 00)
-// Define exit time (e.g., 03:15 PM)
-// exitTime = timestamp(year, month, dayofmonth, 14, 45)
-exitTime = instrument == 'NSE' ? timestamp(year, month, dayofmonth, 15, 12) : timestamp(year, month, dayofmonth, 23, 00)
+// intradayStartTime = timestamp(year, month, dayofmonth, 09, 30)
+// intradayEndTime = timestamp(year, month, dayofmonth, 14, 59)
+// // Define exit time (e.g., 03:15 PM)
+// // exitTime = timestamp(year, month, dayofmonth, 14, 45)
 // exitTime = timestamp(year, month, dayofmonth, 15, 12)
-// Entry conditions within the intraday time range
-inIntradayTimeRange = (time >= intradayStartTime) and (time <= intradayEndTime)
-// Exit condition at 03:15 PM
-exitCondition = time >= exitTime
+// // exitTime = timestamp(year, month, dayofmonth, 15, 12)
+// // Entry conditions within the intraday time range
+// inIntradayTimeRange = (time >= intradayStartTime) and (time <= intradayEndTime)
+// // Exit condition at 03:15 PM
+// exitCondition = time >= exitTime
+// // Quatity
+// positionSize = 75
+
+// highestHigh = ta.highest(close, 3)
+// lowestLow = ta.lowest(close, 3)
 
 
-// Function to generate JSON object
-generateJSON(type, orderType, exchange, timestamp, volume, timeframe, symbol, price, qty, datetime) =>
-    '{"type":"' + type + '","orderType":"' + orderType + '","exchange":"' + exchange + '","timestamp":"' + str.tostring(timestamp) +'","volume":"' + str.tostring(volume) + '","timeframe":"' + timeframe + '","symbol":"' + symbol + '","price":' + str.tostring(price) + ',"qty":' + str.tostring(qty) + ',"datetime":"' + str.tostring(datetime) + '"}'
+// // STEP 2:
+// // Determine trail stop loss prices
+// longStopPrice = 0.0
+// shortStopPrice = 0.0
 
-//-----------------------------------------------------------------------------{
+// longStopPrice := if strategy.position_size > 0
+//     stopValue = fastMA
+//     math.max(stopValue, longStopPrice[1])
+// else
+//     0
 
-
-// Quatity
-positionSize = instrument == 'NSE' ? 100 : 1
-
-//-----------------------------------------------------------------------------{
-
-// STEP 2:
-// Determine trail stop loss prices
-longStopPrice = 0.0
-shortStopPrice = 0.0
-
-longStopPrice := if strategy.position_size > 0
-    stopValue = fastMA
-    math.max(stopValue, longStopPrice[1])
-else
-    0
-
-shortStopPrice := if strategy.position_size < 0
-    stopValue = fastMA
-    math.min(stopValue, shortStopPrice[1])
-else
-    999999
+// shortStopPrice := if strategy.position_size < 0
+//     stopValue = fastMA
+//     math.min(stopValue, shortStopPrice[1])
+// else
+//     999999
 
 
-// IsLong() returns 'true' when the strategy has an open long
-// position. Returns 'false' when the script is short or flat.
-IsLong() =>
-    strategy.position_size > 0
-
-// IsShort() returns 'true' when the strategy has an open short
-// position. Returns 'false' when the script is long or flat.
-IsShort() =>
-    strategy.position_size < 0
-
-// Define strategy parameters
-longSignal = upos > upos[1] and inIntradayTimeRange
-shortSignal = dnos > dnos[1] and inIntradayTimeRange
-
-// Buy Entry and exit
-// if longSignal
-//     strategy.close_all('CLOSE ALL BEFORE NEW')
-//     strategy.exit("LX", from_entry="Enter Buy", stop=fastMA, alert_message = lx)
-//     strategy.entry("LE", strategy.long, positionSize, alert_message = le)
+// // Buy Entry and exit
+// if upCrossover and inIntradayTimeRange
+//     strategy.close_all('Enter New Buy')
+//     strategy.close('Enter New Buy', "Close Existing Trade", qty_percent = 100)
+//     strategy.exit("Exit Buy", from_entry="Enter Buy", stop=fastMA)    
+//     strategy.entry("Enter Buy", strategy.long, positionSize)
     
 // // Sell Entry and exit
-// if shortSignal
-//     strategy.close_all('CLOSE ALL BEFORE NEW')
-//     strategy.exit("SX", from_entry="Enter Sell", stop=fastMA, alert_message = sx)
-//     strategy.entry("SE", strategy.short, positionSize, alert_message = se)
-
-// if upCrossover and inIntradayTimeRange
-//     strategy.close_all('CLOSE ALL BEFORE NEW')
-//     strategy.entry("LE", strategy.long, positionSize)
-//     // Get price of last entry in current position
-//     lastEntryPrice = strategy.opentrades.entry_price(strategy.opentrades - 1)
-
-//     strategy.exit("LX", from_entry="Enter Buy", stop=fastMA)
-
-
 // if downCrossunder and inIntradayTimeRange
-//     strategy.close_all('CLOSE ALL BEFORE NEW')
-//     strategy.exit("SX", from_entry="Enter Sell", stop=fastMA)
-//     strategy.entry("SE", strategy.short, positionSize)
-
+//     strategy.close_all('Enter New Sell')
+//     strategy.close('Enter New Sell', "Close Existing Trade", qty_percent = 100)
+//     strategy.exit("Exit Sell", from_entry="Enter Sell", stop=fastMA)
+//     strategy.entry("Enter Sell", strategy.short, positionSize)
 
 // // Exit conditions (simple exit at crossover or crossunder and exit at 03:15 PM)
 // if exitCondition
 //     strategy.close_all('Closing All orders')
 
+
 // // Submit exit orders for trail stop loss price
 // if strategy.position_size > 0
-//     strategy.exit("LX TRL STP", stop=longStopPrice)
+//     strategy.exit("XL TRL STP", stop=longStopPrice)
 
 // if strategy.position_size < 0
-//     strategy.exit("SX TRL STP", stop=shortStopPrice)
+//     strategy.exit("XS TRL STP", stop=shortStopPrice)
 
 //-----------------------------------------------------------------------------}

@@ -72,7 +72,7 @@ STOCHZONE = kValue >= stochOverBought ? "OVERBOUGHT":
 
 ema5 = ta.ema(close, 5)
 ema13 = ta.ema(close, 13)
-ema0 = ta.ema(close, 20)
+ema20 = ta.ema(close, 20)
 ema26 = ta.ema(close, 26)
 ema50 = ta.ema(close, 50)
 

@@ -84,7 +84,18 @@ app.controller('TradingController', ['$scope', '$http', function ($scope, $http)
     pricecurrent: 0,
     "fiveDayAvg": 0,
   };
-  $scope.startingBalance = 100000;
+  $scope.account = {
+    balance: 1000000,
+    risk: 2,
+    riskAmount: 0,
+    reward: 1.5
+  };
+
+  $scope.calculateRiskAmount = function () {
+    $scope.account.riskAmount = $scope.account.balance * $scope.account.risk / 100;
+    return $scope.account.riskAmount;
+  }
+
   $scope.realizedPL = 0;
   $scope.unrealizedPL = 0;
   $scope.currentBalance = $scope.startingBalance;
@@ -108,6 +119,16 @@ app.controller('TradingController', ['$scope', '$http', function ($scope, $http)
               $scope.stockData.fiveDayAvg = data['5DayAvg']
               $scope.newTrade.price = data.pricecurrent;
               $scope.newTrade.stock = data.NSEID;
+
+              const currentRiskPoint = $scope.newTrade.price * $scope.account.risk / 100;
+              $scope.newTrade.stoploss = $scope.newTrade.price - currentRiskPoint;
+              console.log(currentRiskPoint)
+              const currentRewardPoint =  currentRiskPoint * $scope.account.reward;
+              console.log(currentRewardPoint)
+              $scope.newTrade.target = Number(data.pricecurrent) + Number(currentRewardPoint);
+              $scope.newTrade.quantity = Math.floor($scope.account.riskAmount / currentRiskPoint);
+              
+              
               // $scope.newTrade.price = data.pricecurrent;
               console.log($scope.stockData)
               // pricecurrent
